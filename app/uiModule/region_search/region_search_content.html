@@ -1,0 +1,242 @@
+<div class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<ng-include src="'navigation_template.html'"></ng-include>
+		<div class="content-wrapper">
+			<section class="content-header">
+				<h1>
+					<span>Regions Editing</span>
+				</h1>
+			</section>
+			<section class="content">
+				<div class="box box-info">
+					<div class="box-header with-border">
+
+								<!-- form start -->
+<form class="form-horizontal">
+<div class="box-body">
+<div class="form-group">
+<label for="inputEmail3" class="col-sm-2 control-label pull-left"
+ng-model="searchedKey"></label>
+    <div class="col-sm-2"></div>
+<div class="col-sm-6">
+<select ng-model="seclectedKey" class="col-sm-2" style="height: 34px;" id="dropdown">
+													<!--                <option value="">select</option>-->
+													<option ng-selected="true" value="description">RegionUse</option>
+													<option value="regiontitle">RegionTitle</option>
+													<option value="normalizedregiontitle">normalizedRegionTitle</option>
+													<option value="ncid">NCID</option>
+</select> <input type="input" class=" form-control col-sm-11 pull-left"
+style="width: 80%;"
+placeholder="Please select RegionUse/RegionTitle/normalRegionTitle or NCID by selecting dropdown"
+ng-model="searchKey"> <label ng-show="myErrr" style="color: red">Please Enter Search Key</label> <label class="bg-warning" ng-show="showError" style="color: red">No
+result Found !!!</label>
+</div>
+<div class="col-sm-2">
+<button type="button" class="btn btn-primary" ng-click="search()">search {{searchedKey}}</button>
+</div>
+</div>
+									</div>
+									<!-- /.box-body -->
+									<div class="box-footer">
+<!--
+										<button type="button" class="btn btn-primary pull-right"
+											ng-click="search()">search {{searchedKey}}</button>
+-->
+									</div>
+								</form>
+<div class="row" ng-show="isResultEnabled">
+<div class="col-xs-12">
+<div class="box box-info">
+<div class="box-header with-border">
+<h3 class="box-title">Region Result</h3>
+</div>
+<div class="box-header">
+<label ng-show="savedMessage" style="color: blue">Saved the Edited/Deleted Region</label> 
+<label ng-show="saveErrr" style="color: red">Unable to Edit/Delete</label>
+<label ng-show="requiredErrr" style="color: red">Please Provide all values</label>
+</div>
+											<!-- /.box-header -->
+
+    <div class="box-body">
+        <table ng-table="tableParams" class="table table-condensed table-bordered table-striped">
+        <tr ng-repeat="regionObj in $data" ng-class='{selected: $index==selectedRow}'>
+        <td data-title="'(Raw)RegionTitle'" sortable="'regionTitle'" filter="{regionTitle:'text'}">{{regionObj.regionTitle}}</td>
+        <td data-title="'NormalizedRegionTitle'" sortable="'normalizedRegionTitle'" filter="{ variantId: 'text'}">{{regionObj.normalizedRegionTitle}}</td>
+        <td data-title="'RegionUse'" sortable="'regionUse'" filter="{ regionUse: 'text'}">{{regionObj.regionUse}}</td>
+        
+        <td data-title="'Action'"  sortable="'Action'" >
+        <div class="btn-group">
+            <button class="btn btn-primary btn-sm" ng-disabled="!regionObj.canCloned  " ng-click="clonedRow($index)" ><span class="glyphicon glyphicon-ok"></span></button>
+<!--            <button class="btn btn-danger btn-sm" ng-click="deleteCopyRow($index)"  ng-disabled="!regionObj.canRemoved">Delete</button>-->
+        
+            </div>
+        </td>
+        </tr>
+        </table>
+        </div>
+	<!--ng-click="editRegionRow(regionObj.regionId)"-->													
+
+											</div>
+										</div>
+										<!-- /.box-body -->
+    </div>
+    
+    <div class="container">
+  
+
+  <!-- Modal -->
+  <div class="modal hide" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background: #333;color: white;">
+          <button type="button" class="close" data-dismiss="modal" ng-click="close()">&times;</button>
+          <h4 class="modal-title">Select RegionUse</h4>
+        </div>
+        <div class="modal-body">
+          
+            
+
+                        <div class="col-md-4 section">
+                            <h3  ng-repeat="region in regionsName|limitTo:1" ng-if="region.title" style="min-height:60px">mapping NormalizedRegionTitle</h3>        
+                                
+              <h3  ng-repeat="region in regionsName|limitTo:1" ng-if="region.description" style="min-height:60px">mapping Region Use</h3>
+<!--                            <h3> New Region Use </h3>-->
+                            <select multiple id="textAreaLastCell"  class = "selectcontainer">
+                            </select>
+                        </div>
+            <div class="col-md-4 section btnGroup">
+                
+                            <button ng-click="shiftData()" class="btnClass">&#8678;</button>
+                            <button ng-click="shiftLastCell()" class="btnClass">&#8680;</button>
+                        </div>
+            <div class="col-md-4 section">
+                            
+               <h3  ng-repeat="region in regionsName|limitTo:1 " ng-if="region.title" style="min-height:60px">Available NormalizedRegionTitle</h3>        
+                                
+              <h3  ng-repeat="region in regionsName|limitTo:1" ng-if="region.description" style="min-height:60px">Available RegionUse</h3>
+                  <select multiple id="selId"  class="selectcontainer">
+                       
+                                <option data-optionname="reguse" ng-repeat="region in regionsName" ng-if="region.description" value="{{region.description}}" filter="{reguse: 'text'}">{{ region.description}}</option>
+                      
+                                <option data-optionname="NormRT" ng-repeat="region in regionsName" ng-if="region.title" value="{{region.title}}" >{{ region.title}}</option>
+                           
+                        </select>
+                        </div>
+          </div>
+        <div class="modal-footer" style="background: #333; color: white; clear:both;">
+            
+          <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="regionUseSave()">Save</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="close()">Close</button>
+        </div>
+        </div>
+      
+    </div>
+  </div>
+  
+</div>
+									
+								</div>
+
+							</div>
+						
+					
+				
+                <form name="myForm">
+     <div class="row" ng-show="isResultEnabled">
+      <div class="col-xs-12">
+        
+              <div class="box box-info">
+            <div class="box-header with-border">
+            <h3 class="box-title">Edit RegionList</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+        <div class="brn-group pull-right">
+        <button class="btn btn-primary"  ng-click="add()">
+        <span class="glyphicon glyphicon-button">Add</span>
+        </button>
+            
+            
+            </div>
+              <div ng-model="checked_editId"></div>
+       </div>
+              <table ng-table="editParams" class="table table-condensed table-bordered table-striped" class="ng-pristine ng-scope ng-invalid ng-invalid-required" disable-filter="isAdding" ng-form="regionObj.tableForm"  >
+            <tr ng-repeat="regionObj in $data track by $index " >
+            <td >
+            <div ng-if="regionObj.action !== ''">
+                <input  type="checkbox" name="selection" value="{{regionObj.editId}}" check-list="checked_editId" dataeditId = "regionObj.testId" ng-click="setRowSelection(regionObj.index,regionObj.testId)"   ng-disabled="isEditing"/>
+            </div>
+            </td>
+            <td title="'Action'" filter="{action: 'text'}" sortable="'Dictionary'" ng-switch="row.isEditing" ng-class="name.$dirty ? 'bg-warning' : ''" ng-form="action" demo-tracked-table-cell>
+            <span ng-switch-default class="editable-text">{{regionObj.action}}</span>
+            <div class="controls" ng-class="dictionary.$invalid && dictionary.$dirty ? 'has-error' : ''" ng-switch-when="true">
+              <input type="text"  name="action" ng-model="row.action = 'Add'" class="editable-input form-control input-sm" value="Add" required />
+                </div></td>
+            
+            <td title="'(Raw)RegionTitle'" sortable="'regionTitle'" filter="{regionTitle:'text'}"   ng-switch="regionObj.isEditing" demo-tracked-table-cell >
+            
+            <span ng-switch-default class="editable-text">{{regionObj.regionTitle}}</span>
+            <div class="controls"  ng-switch-when="true">
+            <input type="text" name="regionTitle" ng-model="regionObj.regionTitle"  ng-keyup="(regionObj.regionTitle.length >= 3) && regionTitleFilter(regionObj.regionTitle)" class="editable-input form-control input-sm" required />
+                          </div>
+            </td>
+
+            <td title="'NormalizedRegionTitle'" sortable="'normalizedRegionTitle'" filter="{normalizedRegionTitle:'text'}"   ng-switch="regionObj.isEditing" demo-tracked-table-cell >
+            <span ng-switch-default class="editable-text">{{regionObj.normalizedRegionTitle}}</span>
+            <div class="controls"  ng-switch-when="true">
+            <input type="text" name="normalizedRegionTitle" ng-model="regionObj.normalizedRegionTitle" id="nromRTId" class="editable-input form-control input-sm" required />
+                <input type="button" value="clickme"
+ng-model="regionObj.editedRegionTitle" ng-click="normalizedregtitle()">
+                          </div>
+            </td>
+                
+                 <td title="'RegionUse'" sortable="'regionUse'" filter="{regionUse:'text'}"   ng-switch="regionObj.isEditing" demo-tracked-table-cell >
+            <span ng-switch-default class="editable-text">{{regionObj.regionUse}}</span>
+            <div class="controls"  ng-switch-when="true">
+            <input type="text" name="regionUse" ng-model="regionObj.regionUse" id="reguseId" class="editable-input form-control input-sm" required />
+                <input type="button" value="clickme"
+ng-model="regionObj.editedRegionTitle" ng-click="reguse()">
+                          </div>
+            </td>
+            <td title="'Row Action'"   >
+        <div class="btn-group">
+        <button class="btn btn-primary" value="{{$index}}" ng-click="save(regionObj, rowForm, $index)" ng-if="regionObj.isEditing" ng-disabled="rowForm.$pristine || rowForm.$invalid"><span class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-default btn-sm" ng-click="cancel(regionObj, rowForm)" ng-if="regionObj.isEditing"><span class="glyphicon glyphicon-remove"></span></button>
+        <button class="btn btn-primary" ng-click="regionObj.isEditing = true" ng-if="!regionObj.isEditing">Edit</button>
+        <div ng-if="regionObj.action == 'Delete' ">
+        <button class="btn btn-danger"  ng-click="deleteRowWithWarning($index)">
+        <span  ng-confirm-click="Are you sure, you want to Delete" ng-disabled="!regionObj.canRemoved" >Revert</span></button>
+                </div>
+                </div>
+            </td>
+                  </tr>
+              </table>
+        </div>
+      </div>
+      <!-- /.box -->
+    </div>
+     </form>
+                
+                
+                
+			</section>
+		</div>
+		<ng-include src="'footer_template.html'"></ng-include>
+		<script>
+			$("#regTabs li").on("click", function(){
+		        $("#regTabs li").removeClass("active");
+		        $(this).addClass("active");
+		        $("#tcontent > div").removeClass("active");
+		        
+		        var tabName = $(this).find("a").attr("data-target");
+
+		        if(tabName !== ""){            
+		            $("#tcontent "+tabName +" ").addClass("active");            
+		        }
+		        
+		    });
+		</script>
+	</div>
+</div>

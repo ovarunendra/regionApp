@@ -1,0 +1,61 @@
+<header class="main-header col-md-12"><a href="#/">
+  <!-- Logo -->
+<!--    style="color:red;"-->
+    <div >
+    <div class="pull-left image" style="background-color:#2c2d33">
+        <img src="../27645121c0532a4c28440eefdd3f912e.jpg" class="img-circle" alt="User Image"  style="width:30px; height:30px; margin:10px 0px 10px 10px">
+      </div>
+  <a href="#" class="logo" style="text-align:left">
+      
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini" style="color:red;"><b>DF</b></span>
+    <!-- logo for regular state and mobile devices -->
+    <span  class="logo-lg"><b>Regions</b></span>
+  </a>
+</div>
+    
+     <div class="pull-right">
+         <h1 style="margin:0px;margin-top:10px;color:#ff0000;margin-right: 50px;">No PHI</h1>
+    </div>
+    
+
+<!--
+<div class="navbar navbar-default navbar-fixed-top " role="navigation">
+    <div class="container" >
+        
+        <div class="collapse navbar-collapse pull-right">
+            
+            <ul class="nav navbar-nav">
+                <li>
+                    <a class="dropdown-toggle" data-toggle="dropdown">Manage <b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-level">
+                        <li class="active"><a href="#/branchList"><i class="fa fa-circle-o"></i> Branch</a></li>
+                        <li><a href="#/releaseContent"><i class="fa fa-circle-o"></i> Release</a></li>
+                    </ul>
+                </li>
+            </ul>         </div>/.nav-collapse 
+    </div>
+</div>
+-->
+
+    </a>
+    <script type="text/javascript">
+ jQuery('.navbar a.dropdown-toggle').on('click', function(e) {
+var $el =  jQuery(this);
+    
+var $parent =  jQuery(this).offsetParent(".dropdown-menu");
+jQuery(this).parent("li").toggleClass('open');
+if(!$parent.parent().hasClass('nav')) {
+$el.next().css({"top": $el[0].offsetTop, "left": $parent.outerWidth() - 4});
+}
+jQuery('.nav li.open').not($(this).parents("li")).removeClass("open");
+return false;
+});
+   jQuery('.dropdown-menu li').on('click', function(e){
+   jQuery('.dropdown-menu').find("li.active").removeClass("active");      
+   jQuery(this).addClass("active");       
+       
+   }); 
+    </script>
+</header>
+
