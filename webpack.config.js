@@ -5,7 +5,7 @@ var config = {
     context: __dirname + '/app',
     entry: {
         app: './index.js',
-        vendor: ['angular','angular-animate','angular-route','angular-cookies','jquery','ngTable'],
+        vendor: ['angular','angular-animate','angular-route','angular-cookies','jquery','ng-table'],
         theme: ['./theme/index.js']
     },
     output: {
@@ -15,9 +15,7 @@ var config = {
     module: {
       loaders: [
       {test: /\.html$/, loader: 'html', exclude: /node_modules/},
-      {test: /\.css$/,  include: [
-        path.resolve(__dirname, "not_exist_path")
-        ], loader: 'style!css', exclude: /node_modules/},
+      {test: /\.css$/, loader: 'style!css!', exclude: /node_modules/},
         { test: /\.map$/, loader: 'json-loader' , exclude: /node_modules/},
         {test: /\.(png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/, loader: 'file' ,exclude: /node_modules/}
         ]
